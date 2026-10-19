@@ -14,12 +14,14 @@ namespace SeulementLesPieces
     //  1. Le joueur ne peut tenir que le Marksman (le revolver vert, qui lance des pièces).
     //  2. Les ennemis ne prennent des dégâts QUE des pièces : ricoshot (tirer sur une pièce)
     //     et coin punch (frapper une pièce). Tout le reste ne fait aucun dégât.
-    [BepInPlugin("fr.samandine.seulementlespieces", "Seulement les pieces", "1.0.0")]
+    //  3. La parade (parry) avec le bras est désactivée. Le bras reste utilisable.
+    [BepInPlugin("fr.samandine.seulementlespieces", "Seulement les pieces", "1.0.1")]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
         internal static ConfigEntry<bool> BloquerArmes;
         internal static ConfigEntry<bool> SeulementDegatsDePieces;
+        internal static ConfigEntry<bool> BloquerParade;
         internal static ConfigEntry<bool> AfficherLogs;
 
         private void Awake()
@@ -30,6 +32,8 @@ namespace SeulementLesPieces
                 "Force le joueur à garder le Marksman en main");
             SeulementDegatsDePieces = Config.Bind("General", "SeulementDegatsDePieces", true,
                 "Les ennemis ne prennent des dégâts que des pièces (ricoshot et coin punch)");
+            BloquerParade = Config.Bind("General", "BloquerParade", true,
+                "Désactive la parade avec le bras (le bras et le coin punch restent utilisables)");
             AfficherLogs = Config.Bind("General", "AfficherLogs", false,
                 "Affiche dans la console chaque dégât autorisé ou bloqué (utile pour vérifier que le mod marche)");
 
@@ -246,6 +250,39 @@ namespace SeulementLesPieces
             }
 
             return autorise;
+        }
+    }
+}
+
+namespace SeulementLesPieces
+{
+    // ------------------------------------------------------------------
+    // Partie 3 : désactiver la parade (parry), mais pas le bras
+    // ------------------------------------------------------------------
+    //
+    // Punch est la classe du jeu qui gère le bras (les coups de poing).
+    // On bloque seulement ses fonctions dont le nom commence par "Parry" (= parade) :
+    // le coup de poing normal, lui, continue de marcher.
+    [HarmonyPatch]
+    public static class PatchParade
+    {
+        static IEnumerable<MethodBase> TargetMethods() =>
+            Outils.FonctionsDe(typeof(Punch)).Where(m => m.Name.StartsWith("Parry"));
+
+        // "__originalMethod" = la fonction du jeu qu'on est en train de bloquer (pour l'afficher).
+        static bool Prefix(MethodBase __originalMethod)
+        {
+            if (!Plugin.BloquerParade.Value)
+                return true;
+
+            // Sécurité : on ne touche jamais à ce qui se passe pendant un coin punch.
+            if (Contexte.DansUnePiece > 0)
+                return true;
+
+            if (Plugin.AfficherLogs.Value)
+                Plugin.Log.LogInfo($"Parade bloquée ({__originalMethod.Name})");
+
+            return false; // "false" = la fonction du jeu ne s'exécute pas
         }
     }
 }

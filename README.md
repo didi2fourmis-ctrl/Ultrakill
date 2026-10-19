@@ -104,6 +104,7 @@ Comment savoir que le joueur s'appelle `NewMovement` et que la fonction s'appell
 - Tu ne peux tenir **que le Marksman** (le revolver vert) : toute autre arme est remplacée.
 - Les ennemis ne prennent des dégâts **que des pièces** : ricoshot et coin punch.
   Tout le reste (tir direct, coup de poing, explosions…) est bloqué.
+- **La parade (parry) est désactivée**, mais le bras reste utilisable (coup de poing, coin punch).
 - Options dans `BepInEx/config/fr.samandine.seulementlespieces.cfg`.
 - Avec `AfficherLogs = true` (désactivé par défaut), la console affiche chaque dégât `AUTORISÉ` ou `bloqué`, avec
   sa source : c'est le moyen de vérifier que le mod fait bien ce qu'on veut.
