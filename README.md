@@ -122,7 +122,7 @@ pièce, et annule les dégâts sinon. Le code est commenté dans `SeulementLesPi
 - Ça marche pour les coups au corps à corps, les tirs, les projectiles et les explosions ennemies.
 - Options dans `BepInEx/config/fr.samandine.clonesvengeurs.cfg` :
   `CopiesParCoup` (1), `MaxClones` (20, sécurité anti-lag), `DelaiParEnnemi` (1 seconde),
-  `ClonesSeDupliquent` (oui), `ExclureBoss` (oui), `SupprimerClonesALaMort` (oui).
+  `ClonesSeDupliquent` (oui), `ExclureBoss` (non : les boss se dupliquent aussi), `SupprimerClonesALaMort` (oui).
 - Les clones ne comptent pas pour les vagues d'arène : il faut toujours tuer les vrais ennemis pour avancer.
 - Avec `AfficherLogs = true`, la console affiche `Blessé (100 -> 70) par : ...` et chaque clone créé.
   Si elle affiche `par : inconnu`, le mod n'a pas trouvé le coupable pour cette attaque.

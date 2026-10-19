@@ -43,7 +43,7 @@ namespace ClonesVengeurs
                 "Un même ennemi ne peut se dupliquer qu'une fois par ce nombre de secondes");
             ClonesSeDupliquent = Config.Bind("General", "ClonesSeDupliquent", true,
                 "Les clones peuvent eux aussi se dupliquer quand ils te blessent");
-            ExclureBoss = Config.Bind("General", "ExclureBoss", true,
+            ExclureBoss = Config.Bind("General", "ExclureBoss", false,
                 "Les boss (ennemis avec une grande barre de vie) ne se dupliquent pas");
             DevinerTireur = Config.Bind("Avance", "DevinerTireur", true,
                 "Pour les projectiles et explosions, devine quel ennemi a tiré (l'ennemi le plus proche quand le projectile apparaît)");
