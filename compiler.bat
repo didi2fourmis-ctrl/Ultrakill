@@ -1,11 +1,17 @@
 @echo off
-rem Double-clique sur ce fichier pour compiler le mod et le copier dans le jeu.
-set "PROJET=%~dp0MonPremierMod\MonPremierMod.csproj"
-if not exist "%PROJET%" goto introuvable
-dotnet build "%PROJET%" -c Release
+rem Double-clique sur ce fichier pour compiler TOUS les mods de ce dossier et les copier dans le jeu.
+set "RACINE=%~dp0"
+if not exist "%RACINE%Directory.Build.props" goto introuvable
+set ERREUR=0
+for /d %%D in ("%RACINE%*") do if exist "%%D\%%~nxD.csproj" (
+  echo.
+  echo ===== Compilation de %%~nxD =====
+  dotnet build "%%D\%%~nxD.csproj" -c Release
+  if errorlevel 1 set ERREUR=1
+)
 echo.
-if errorlevel 1 goto echec
-echo OK : le mod a ete copie dans ULTRAKILL\BepInEx\plugins\MonPremierMod
+if "%ERREUR%"=="1" goto echec
+echo OK : les mods ont ete copies dans ULTRAKILL\BepInEx\plugins
 pause
 exit /b 0
 
@@ -15,9 +21,8 @@ pause
 exit /b 1
 
 :introuvable
-echo ECHEC : le dossier MonPremierMod est introuvable a cote de compiler.bat.
+echo ECHEC : les fichiers du projet sont introuvables a cote de compiler.bat.
 echo Dossier actuel : "%~dp0"
 echo As-tu bien EXTRAIT le ZIP - clic droit puis Extraire tout - avant de lancer ce fichier ?
-echo compiler.bat doit etre dans le meme dossier que le dossier MonPremierMod.
 pause
 exit /b 1

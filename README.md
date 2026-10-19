@@ -38,8 +38,8 @@ Ce dépôt contient un premier mod complet et commenté : **MonPremierMod**, qui
 
 ## 2. Compiler le mod d'exemple
 
-1. Ouvre `MonPremierMod/MonPremierMod.csproj` dans un éditeur de texte et vérifie la ligne
-   `GamePath` : elle doit pointer vers ton dossier ULTRAKILL.
+1. Ouvre `Directory.Build.props` (à la racine) dans le Bloc-notes et vérifie la ligne
+   `GamePath` : elle doit pointer vers ton dossier ULTRAKILL. Ce réglage sert à tous les mods.
 2. Double-clique sur **`compiler.bat`** (à la racine du dossier). Il faut avoir installé
    le **.NET SDK 8** : https://dotnet.microsoft.com/download
    (ou ouvre le `.csproj` avec Visual Studio, puis **Générer → Générer la solution**).
@@ -99,6 +99,22 @@ Comment savoir que le joueur s'appelle `NewMovement` et que la fonction s'appell
 
 ---
 
+## 5 bis. Le mod « Seulement les pièces » (`SeulementLesPieces/`)
+
+- Tu ne peux tenir **que le Marksman** (le revolver vert) : toute autre arme est remplacée.
+- Les ennemis ne prennent des dégâts **que des pièces** : ricoshot et coin punch.
+  Tout le reste (tir direct, coup de poing, explosions…) est bloqué.
+- Options dans `BepInEx/config/fr.samandine.seulementlespieces.cfg`.
+- Avec `AfficherLogs = true`, la console affiche chaque dégât `AUTORISÉ` ou `bloqué`, avec
+  sa source : c'est le moyen de vérifier que le mod fait bien ce qu'on veut.
+- Pense à retirer `BepInEx/plugins/MonPremierMod` si tu ne veux plus des dégâts réduits.
+
+Comment ça marche : le jeu appelle `EnemyIdentifier.DeliverDamage` pour blesser un ennemi.
+Le mod retient si le code en cours vient d'une pièce (`Coin`) ou d'un tir créé par une
+pièce, et annule les dégâts sinon. Le code est commenté dans `SeulementLesPieces/Plugin.cs`.
+
+---
+
 ## 6. Apprendre le C# (bases utiles)
 
 Pas besoin de tout connaître. Concentre-toi sur : variables, `if`, fonctions, classes.
@@ -115,7 +131,7 @@ Pas besoin de tout connaître. Concentre-toi sur : variables, `if`, fonctions, c
 
 | Problème | Solution |
 |---|---|
-| Erreur « type ou espace de noms introuvable » | `GamePath` incorrect dans le `.csproj` |
+| Erreur « type ou espace de noms introuvable » | `GamePath` incorrect dans `Directory.Build.props` |
 | Pas de console au lancement | Active `[Logging.Console] Enabled = true` dans `BepInEx.cfg` |
 | Le mod ne se charge pas | Vérifie que le `.dll` est bien dans `BepInEx/plugins/` ; regarde `BepInEx/LogOutput.log` |
 | Erreur Harmony « Ambiguous match » | La fonction a plusieurs versions : précise les types de paramètres dans `[HarmonyPatch]` |

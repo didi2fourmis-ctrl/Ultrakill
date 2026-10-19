@@ -1,0 +1,7 @@
+<Project>
+  <!-- Réglages communs à TOUS les mods de ce dossier. -->
+  <PropertyGroup>
+    <!-- CHANGE CE CHEMIN si ton jeu est installé ailleurs (une seule fois, ici) -->
+    <GamePath>C:\Program Files (x86)\Steam\steamapps\common\ULTRAKILL</GamePath>
+  </PropertyGroup>
+</Project>
