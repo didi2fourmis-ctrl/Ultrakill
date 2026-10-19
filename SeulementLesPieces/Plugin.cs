@@ -30,7 +30,7 @@ namespace SeulementLesPieces
                 "Force le joueur à garder le Marksman en main");
             SeulementDegatsDePieces = Config.Bind("General", "SeulementDegatsDePieces", true,
                 "Les ennemis ne prennent des dégâts que des pièces (ricoshot et coin punch)");
-            AfficherLogs = Config.Bind("General", "AfficherLogs", true,
+            AfficherLogs = Config.Bind("General", "AfficherLogs", false,
                 "Affiche dans la console chaque dégât autorisé ou bloqué (utile pour vérifier que le mod marche)");
 
             // On applique chaque patch séparément : si l'un d'eux échoue (par exemple après une

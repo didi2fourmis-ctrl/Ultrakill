@@ -105,7 +105,7 @@ Comment savoir que le joueur s'appelle `NewMovement` et que la fonction s'appell
 - Les ennemis ne prennent des dégâts **que des pièces** : ricoshot et coin punch.
   Tout le reste (tir direct, coup de poing, explosions…) est bloqué.
 - Options dans `BepInEx/config/fr.samandine.seulementlespieces.cfg`.
-- Avec `AfficherLogs = true`, la console affiche chaque dégât `AUTORISÉ` ou `bloqué`, avec
+- Avec `AfficherLogs = true` (désactivé par défaut), la console affiche chaque dégât `AUTORISÉ` ou `bloqué`, avec
   sa source : c'est le moyen de vérifier que le mod fait bien ce qu'on veut.
 - Pense à retirer `BepInEx/plugins/MonPremierMod` si tu ne veux plus des dégâts réduits.
 
