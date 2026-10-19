@@ -116,6 +116,25 @@ pièce, et annule les dégâts sinon. Le code est commenté dans `SeulementLesPi
 
 ---
 
+## 5 ter. Le mod « Clones vengeurs » (`ClonesVengeurs/`)
+
+- **Chaque fois qu'un ennemi te fait perdre de la vie, il se duplique** : un clone apparaît à côté de lui.
+- Ça marche pour les coups au corps à corps, les tirs, les projectiles et les explosions ennemies.
+- Options dans `BepInEx/config/fr.samandine.clonesvengeurs.cfg` :
+  `CopiesParCoup` (1), `MaxClones` (20, sécurité anti-lag), `DelaiParEnnemi` (1 seconde),
+  `ClonesSeDupliquent` (oui), `ExclureBoss` (oui), `SupprimerClonesALaMort` (oui).
+- Les clones ne comptent pas pour les vagues d'arène : il faut toujours tuer les vrais ennemis pour avancer.
+- Avec `AfficherLogs = true`, la console affiche `Blessé (100 -> 70) par : ...` et chaque clone créé.
+  Si elle affiche `par : inconnu`, le mod n'a pas trouvé le coupable pour cette attaque.
+
+Comment ça marche : `NewMovement.GetHurt` (le joueur prend des dégâts) ne dit pas qui a frappé.
+Au démarrage, le mod lit le code du jeu et surveille toutes les fonctions qui appellent `GetHurt`
+(projectiles, coups, explosions…). Au moment du coup, il regarde quel objet était en train
+d'exécuter son code et remonte jusqu'à l'ennemi (`EnemyIdentifier`). Pour un projectile, il retient
+quel ennemi l'a tiré au moment où il apparaît. Puis il copie l'ennemi avec `Instantiate`.
+
+---
+
 ## 6. Apprendre le C# (bases utiles)
 
 Pas besoin de tout connaître. Concentre-toi sur : variables, `if`, fonctions, classes.
