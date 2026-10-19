@@ -40,8 +40,9 @@ Ce dépôt contient un premier mod complet et commenté : **MonPremierMod**, qui
 
 1. Ouvre `MonPremierMod/MonPremierMod.csproj` dans un éditeur de texte et vérifie la ligne
    `GamePath` : elle doit pointer vers ton dossier ULTRAKILL.
-2. Ouvre le `.csproj` avec Visual Studio, puis **Générer → Générer la solution**
-   (ou en ligne de commande, dans le dossier `MonPremierMod` : `dotnet build`).
+2. Double-clique sur **`compiler.bat`** (à la racine du dossier). Il faut avoir installé
+   le **.NET SDK 8** : https://dotnet.microsoft.com/download
+   (ou ouvre le `.csproj` avec Visual Studio, puis **Générer → Générer la solution**).
 3. Le fichier `MonPremierMod.dll` est copié automatiquement dans
    `ULTRAKILL/BepInEx/plugins/MonPremierMod/`.
 4. Lance le jeu. Dans la console BepInEx tu dois voir : `Mon Premier Mod est chargé !`
