@@ -48,6 +48,17 @@ namespace Ouroboros
             }
         }
 
+        // Lit un champ ou une propriété par son nom (null si absent).
+        public static object Get(object target, string name)
+        {
+            if (target == null) return null;
+            var t = HarmonyLib.Traverse.Create(target);
+            var p = t.Property(name);
+            if (p.PropertyExists()) return p.GetValue();
+            var f = t.Field(name);
+            return f.FieldExists() ? f.GetValue() : null;
+        }
+
         private static MethodInfo Find(Type type, string method, object[] leading)
         {
             MethodInfo best = null;

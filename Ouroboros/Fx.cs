@@ -11,12 +11,35 @@ namespace Ouroboros
         public static readonly Color Magenta = new Color(1f, 0.3f, 1f, 0.7f);
         public static readonly Color Blood = new Color(1f, 0.1f, 0.1f, 0.8f);
 
+        private static readonly string[] ShaderNames = { "Sprites/Default", "UI/Default", "Unlit/Color", "Legacy Shaders/Particles/Alpha Blended" };
         private static Shader shader;
+        private static Material fallback;
+        private static bool resolved;
 
+        // Si aucun shader transparent n'est inclus dans le jeu, on se rabat sur le
+        // matériau par défaut des primitives Unity (opaque, mais visible).
         public static Material Mat(Color c)
         {
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            return new Material(shader) { color = c };
+            if (!resolved)
+            {
+                resolved = true;
+                foreach (var name in ShaderNames)
+                {
+                    shader = Shader.Find(name);
+                    if (shader != null) { Diag.Shader = name; break; }
+                }
+                if (shader == null)
+                {
+                    var tmp = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    fallback = tmp.GetComponent<Renderer>().sharedMaterial;
+                    Object.Destroy(tmp);
+                    Diag.Shader = fallback != null ? "secours : " + fallback.shader.name : "AUCUN (fantômes invisibles)";
+                }
+            }
+
+            Material m = shader != null ? new Material(shader) : fallback != null ? new Material(fallback) : null;
+            if (m != null) m.color = c;
+            return m;
         }
 
         public static GameObject Primitive(PrimitiveType type, Color c, Transform parent = null)
@@ -24,7 +47,8 @@ namespace Ouroboros
             var go = GameObject.CreatePrimitive(type);
             Object.Destroy(go.GetComponent<Collider>());
             var r = go.GetComponent<Renderer>();
-            r.sharedMaterial = Mat(c);
+            var mat = Mat(c);
+            if (mat != null) r.sharedMaterial = mat;
             r.shadowCastingMode = ShadowCastingMode.Off;
             r.receiveShadows = false;
             if (parent != null) go.transform.SetParent(parent, false);
@@ -77,8 +101,8 @@ namespace Ouroboros
                 if (k >= 1f) { Destroy(gameObject); return; }
                 var c = color;
                 c.a *= 1f - k;
-                if (line != null) line.sharedMaterial.color = c;
-                if (rend != null) rend.sharedMaterial.color = c;
+                if (line != null && line.sharedMaterial != null) line.sharedMaterial.color = c;
+                if (rend != null && rend.sharedMaterial != null) rend.sharedMaterial.color = c;
                 if (grow > 0f) transform.localScale = Vector3.one * Mathf.Lerp(0.1f, grow, Mathf.Sqrt(k));
             }
         }

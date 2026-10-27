@@ -21,6 +21,7 @@ namespace Ouroboros
             {
                 var target = AccessTools.Method(typeof(EnemyIdentifier), "DeliverDamage");
                 harmony.Patch(target, prefix: new HarmonyMethod(typeof(Patches), nameof(DeliverDamagePrefix)));
+                Diag.DamageHooked = true;
             }
             catch (Exception e)
             {
@@ -40,6 +41,7 @@ namespace Ouroboros
                     return;
                 }
                 harmony.Patch(target, postfix: new HarmonyMethod(typeof(Patches), postfix));
+                Diag.WeaponsHooked++;
             }
             catch (Exception e)
             {

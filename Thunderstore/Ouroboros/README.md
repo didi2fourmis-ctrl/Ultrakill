@@ -12,7 +12,7 @@ rejouent exactement ce que tu as fait, avec de vrais dégâts.
 - **PARADOXE** : frappe ton Écho au poing → téléportation à sa place, onde de choc, +25 PV.
 - **DETTE TEMPORELLE** : retomber au rang D avec des Échos actifs → chacun t'inflige 15 dégâts.
 
-**F8** active ou désactive le mod. Réglages : `BepInEx/config/fr.samandine.ouroboros.cfg`.
+**F8** active ou désactive le mod, **F9** ouvre le panneau d'état, **F10** force un Écho. Réglages : `BepInEx/config/fr.samandine.ouroboros.cfg`.
 
 ## English
 Every move and shot you make is recorded. As your style rank climbs, **Echoes** (ghosts
@@ -23,4 +23,4 @@ of you, 5 seconds in the past) spawn and replay exactly what you did, with real 
 - **PARADOX**: punch your own Echo → teleport to it, shockwave, +25 HP.
 - **TEMPORAL DEBT**: drop to rank D with Echoes alive → each one deals 15 damage to you.
 
-**F8** toggles the mod. Settings: `BepInEx/config/fr.samandine.ouroboros.cfg`.
+**F8** toggles the mod, **F9** opens the status panel, **F10** forces an Echo. Settings: `BepInEx/config/fr.samandine.ouroboros.cfg`.

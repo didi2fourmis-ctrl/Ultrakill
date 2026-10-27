@@ -70,6 +70,7 @@ namespace Ouroboros
                 lastNail = Time.time;
             }
 
+            Diag.ShotsRecorded++;
             Shots.Add(new ShotEvent { T = Time.time, Origin = cam.position, Dir = cam.forward, Kind = kind });
         }
 

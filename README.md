@@ -149,6 +149,10 @@ passé, qui refont exactement ce que tu as fait, avec de vrais dégâts.
   une onde de choc autour de toi et te rend 25 PV.
 - **DETTE TEMPORELLE** : si tu retombes au rang D avec des Échos actifs, chacun t'inflige 15 dégâts.
 - **F8** active ou désactive le mod. Un compteur `∞ ●●○· ∞` en haut de l'écran montre tes Échos.
+- **F9** ouvre le panneau d'état : il dit ce que le mod voit (joueur, rang de style, passé
+  enregistré, armes suivies, erreurs) et **pourquoi aucun Écho n'apparaît**.
+- **F10** invoque un Écho tout de suite, quel que soit le rang : pratique pour tester.
+- Option `IgnoreRank = true` : 4 Échos disponibles en permanence, même au rang D.
 - Options dans `BepInEx/config/fr.samandine.ouroboros.cfg`.
 
 Comment ça marche : le code est découpé en plusieurs fichiers.

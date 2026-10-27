@@ -16,12 +16,15 @@ namespace Ouroboros
     {
         public const string Guid = "fr.samandine.ouroboros";
         public const string Name = "OUROBOROS";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
 
         internal static ManualLogSource Log;
 
         internal static ConfigEntry<bool> Enabled;
         internal static ConfigEntry<KeyCode> ToggleKey;
+        internal static ConfigEntry<KeyCode> PanelKey;
+        internal static ConfigEntry<KeyCode> ForceKey;
+        internal static ConfigEntry<bool> IgnoreRank;
         internal static ConfigEntry<float> EchoDuration;
         internal static ConfigEntry<float> SpawnInterval;
         internal static ConfigEntry<float> EchoDamage;
@@ -41,6 +44,9 @@ namespace Ouroboros
             Enabled = Config.Bind("General", "Enabled", true, "Active le mod.");
             ToggleKey = Config.Bind("General", "ToggleKey", KeyCode.F8, "Touche pour activer/désactiver OUROBOROS en jeu.");
             ShowHud = Config.Bind("General", "ShowHud", true, "Affiche le compteur d'Échos.");
+            PanelKey = Config.Bind("General", "PanelKey", KeyCode.F9, "Ouvre/ferme le panneau d'état d'OUROBOROS.");
+            ForceKey = Config.Bind("General", "ForceKey", KeyCode.F10, "Invoque un Écho tout de suite (test), quel que soit le rang.");
+            IgnoreRank = Config.Bind("Echoes", "IgnoreRank", false, "Si true, le nombre maximum d'Échos (4) est toujours disponible, quel que soit le rang de style.");
 
             EchoDuration = Config.Bind("Echoes", "EchoDuration", 5f, "Secondes de passé rejouées par chaque Écho.");
             SpawnInterval = Config.Bind("Echoes", "SpawnInterval", 2.5f, "Délai minimum entre deux Échos.");

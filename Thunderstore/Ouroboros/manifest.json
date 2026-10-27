@@ -1,6 +1,6 @@
 {
   "name": "Ouroboros",
-  "version_number": "1.0.0",
+  "version_number": "1.1.0",
   "website_url": "https://github.com/didi2fourmis-ctrl/Ultrakill",
   "description": "Your past fights beside you: style rank summons Echoes that replay your moves and shots. Punch them for a PARADOX. / Ton passe se bat a tes cotes : le style invoque des Echos qui rejouent tes tirs.",
   "dependencies": [

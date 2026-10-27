@@ -55,13 +55,13 @@ namespace Ouroboros
             if (hud != null) Reflect.Call(hud, "AddPoints", points, id);
         }
 
-        // 0 = D ... 7 = ULTRAKILL
+        // 0 = D ... 7 = ULTRAKILL, -1 si le rang est illisible.
         public static int Rank
         {
             get
             {
                 var hud = Hud;
-                return hud == null ? 0 : Traverse.Create(hud).Field("rankIndex").GetValue<int>();
+                return Reflect.Get(hud, "rankIndex") is int rank ? rank : -1;
             }
         }
     }

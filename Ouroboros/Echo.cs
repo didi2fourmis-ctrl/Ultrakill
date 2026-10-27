@@ -80,7 +80,7 @@ namespace Ouroboros
             float alpha = Fx.Cyan.a * flicker * (1f - life * life);
             foreach (var r in renderers)
             {
-                if (r == null || r.transform == visor) continue;
+                if (r == null || r.transform == visor || r.sharedMaterial == null) continue;
                 var c = r.sharedMaterial.color;
                 c.a = alpha;
                 r.sharedMaterial.color = c;
