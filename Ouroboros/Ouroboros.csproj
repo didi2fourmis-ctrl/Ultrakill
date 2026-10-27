@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- ULTRAKILL tourne sur Unity (Mono) : on compile pour .NET Framework 4.7.2 -->
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Ouroboros</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- Le chemin du jeu (GamePath) se règle dans Directory.Build.props, à la racine -->
+    <ManagedPath>$(GamePath)\ULTRAKILL_Data\Managed</ManagedPath>
+    <BepInExPath>$(GamePath)\BepInEx\core</BepInExPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Permet de compiler pour net472 sans installer le "targeting pack" -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- BepInEx (le chargeur de mods) et Harmony (pour modifier les méthodes du jeu) -->
+    <Reference Include="BepInEx" HintPath="$(BepInExPath)\BepInEx.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExPath)\0Harmony.dll" Private="false" />
+
+    <!-- Le code du jeu lui-même -->
+    <Reference Include="Assembly-CSharp" HintPath="$(ManagedPath)\Assembly-CSharp.dll" Private="false" />
+
+    <!-- Unity -->
+    <Reference Include="UnityEngine" HintPath="$(ManagedPath)\UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedPath)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(ManagedPath)\UnityEngine.PhysicsModule.dll" Private="false" />
+    <!-- Affichage du compteur d'Échos (OnGUI) et touches clavier -->
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(ManagedPath)\UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="$(ManagedPath)\UnityEngine.TextRenderingModule.dll" Private="false" />
+    <Reference Include="UnityEngine.InputLegacyModule" HintPath="$(ManagedPath)\UnityEngine.InputLegacyModule.dll" Private="false" />
+  </ItemGroup>
+
+  <!-- Après compilation, copie automatiquement le mod dans le dossier plugins du jeu -->
+  <Target Name="CopyToPlugins" AfterTargets="Build" Condition="Exists('$(GamePath)\BepInEx\plugins')">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GamePath)\BepInEx\plugins\Ouroboros" />
+  </Target>
+
+</Project>

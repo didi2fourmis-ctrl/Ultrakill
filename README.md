@@ -135,6 +135,35 @@ quel ennemi l'a tiré au moment où il apparaît. Puis il copie l'ennemi avec `I
 
 ---
 
+## 5 quater. Le mod « Ouroboros » (`Ouroboros/`)
+
+*« Le sang se souvient. »* Le mod enregistre en continu tes mouvements et tes tirs. Quand ton
+rang de style monte, des **Échos** apparaissent : des fantômes de toi, 5 secondes dans le
+passé, qui refont exactement ce que tu as fait, avec de vrais dégâts.
+
+- **ÉCHOS** : 0 Écho au rang D, 1 en C/B, 2 en A/S, 3 en SS/SSS, 4 au rang ULTRAKILL.
+  Revolver (tir chargé compris), shotgun, nailgun, railcannon et roquettes sont imités.
+- **BOUCLE CAUSALE** : si toi et un Écho touchez le même ennemi à moins de 0,6 s
+  d'intervalle, le second coup fait le double de dégâts.
+- **PARADOXE** : un coup de poing sur ton propre Écho te téléporte à sa place, déclenche
+  une onde de choc autour de toi et te rend 25 PV.
+- **DETTE TEMPORELLE** : si tu retombes au rang D avec des Échos actifs, chacun t'inflige 15 dégâts.
+- **F8** active ou désactive le mod. Un compteur `∞ ●●○· ∞` en haut de l'écran montre tes Échos.
+- Options dans `BepInEx/config/fr.samandine.ouroboros.cfg`.
+
+Comment ça marche : le code est découpé en plusieurs fichiers.
+- `ChronoRecorder.cs` note 60 fois par seconde ta position et ton regard.
+- `Patches.cs` s'accroche à la fonction `Shoot` de chaque arme pour noter tes tirs.
+- `Echo.cs` relit cet enregistrement avec 5 secondes de retard, et `EchoGunfire.cs`
+  rejoue chaque tir avec un rayon (`Physics.Raycast`) qui appelle `EnemyIdentifier.DeliverDamage`.
+- `Causality.cs` détecte les BOUCLES CAUSALES grâce à un `Prefix` sur `DeliverDamage`.
+
+Les fonctions du jeu dont les paramètres changent souvent sont appelées par réflexion
+(`Reflect.cs`) : si une mise à jour en casse une, seule la fonctionnalité concernée
+s'arrête et un avertissement apparaît dans la console.
+
+---
+
 ## 6. Apprendre le C# (bases utiles)
 
 Pas besoin de tout connaître. Concentre-toi sur : variables, `if`, fonctions, classes.
