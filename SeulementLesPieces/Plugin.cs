@@ -15,7 +15,8 @@ namespace SeulementLesPieces
     //  2. Les ennemis ne prennent des dégâts QUE des pièces : ricoshot (tirer sur une pièce)
     //     et coin punch (frapper une pièce). Tout le reste ne fait aucun dégât.
     //  3. La parade (parry) avec le bras est désactivée. Le bras reste utilisable.
-    [BepInPlugin("fr.samandine.seulementlespieces", "Seulement les pieces", "1.0.1")]
+    //  4. Exception : le coup de poing peut casser les Idoles.
+    [BepInPlugin("fr.samandine.seulementlespieces", "Seulement les pieces", "1.0.2")]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -23,6 +24,7 @@ namespace SeulementLesPieces
         internal static ConfigEntry<bool> SeulementDegatsDePieces;
         internal static ConfigEntry<bool> BloquerParade;
         internal static ConfigEntry<bool> AfficherLogs;
+        internal static ConfigEntry<bool> PoingCasseIdoles;
 
         private void Awake()
         {
@@ -34,6 +36,8 @@ namespace SeulementLesPieces
                 "Les ennemis ne prennent des dégâts que des pièces (ricoshot et coin punch)");
             BloquerParade = Config.Bind("General", "BloquerParade", true,
                 "Désactive la parade avec le bras (le bras et le coin punch restent utilisables)");
+            PoingCasseIdoles = Config.Bind("General", "PoingCasseIdoles", true,
+                "Le coup de poing peut casser les Idoles (même si seules les pièces font des dégâts)");
             AfficherLogs = Config.Bind("General", "AfficherLogs", false,
                 "Affiche dans la console chaque dégât autorisé ou bloqué (utile pour vérifier que le mod marche)");
 
@@ -159,6 +163,7 @@ namespace SeulementLesPieces
     {
         public static int DansUnePiece;          // > 0 pendant que du code de Coin s'exécute
         public static bool DansUnTirDePiece;     // vrai pendant que du code d'un tir de pièce s'exécute
+        public static int DansUnPoing;           // > 0 pendant que du code du bras (Punch) s'exécute
     }
 
     // Petite "étiquette" qu'on colle sur les tirs créés par une pièce.
@@ -211,6 +216,17 @@ namespace SeulementLesPieces
         }
     }
 
+    // Patch sur TOUTES les fonctions de Punch (le bras) : on compte quand on est dans un coup de poing.
+    [HarmonyPatch]
+    public static class PatchContextePoing
+    {
+        static IEnumerable<MethodBase> TargetMethods() => Outils.FonctionsDe(typeof(Punch));
+
+        static void Prefix() => Contexte.DansUnPoing++;
+
+        static void Finalizer() => Contexte.DansUnPoing--;
+    }
+
     // Patch sur toutes les fonctions de RevolverBeam (un tir) : on note si le tir a l'étiquette.
     [HarmonyPatch]
     public static class PatchContexteTir
@@ -240,17 +256,28 @@ namespace SeulementLesPieces
             if (!Plugin.SeulementDegatsDePieces.Value)
                 return true;
 
-            bool autorise = Contexte.DansUnePiece > 0 || Contexte.DansUnTirDePiece;
+            // "hitter" est le nom que le jeu donne à la source des dégâts (revolver, punch, coin...).
+            string source = Traverse.Create(__instance).Field("hitter").GetValue<string>();
+
+            bool autorise = Contexte.DansUnePiece > 0 || Contexte.DansUnTirDePiece
+                            || (Plugin.PoingCasseIdoles.Value && EstUneIdole(__instance) && EstUnCoupDePoing(source));
 
             if (Plugin.AfficherLogs.Value)
             {
-                // "hitter" est le nom que le jeu donne à la source des dégâts (revolver, punch, coin...).
-                string source = Traverse.Create(__instance).Field("hitter").GetValue<string>();
                 Plugin.Log.LogInfo($"{(autorise ? "AUTORISÉ" : "bloqué  ")} | ennemi : {__instance.name} | source : {source}");
             }
 
             return autorise;
         }
+
+        static bool EstUneIdole(EnemyIdentifier ennemi) =>
+            ennemi.enemyType == EnemyType.Idol || ennemi.GetComponentInParent<Idol>() != null;
+
+        // Coup de poing : soit on est dans le code du bras, soit le jeu dit que la source est un "punch"
+        // ("punch" = Feedbacker, "heavypunch" = Knuckleblaster).
+        static bool EstUnCoupDePoing(string source) =>
+            Contexte.DansUnPoing > 0
+            || (source != null && source.IndexOf("punch", StringComparison.OrdinalIgnoreCase) >= 0);
     }
 }
 

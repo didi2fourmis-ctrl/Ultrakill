@@ -1,8 +1,8 @@
 {
   "name": "SeulementLesPieces",
-  "version_number": "1.0.1",
+  "version_number": "1.0.2",
   "website_url": "https://github.com/didi2fourmis-ctrl/Ultrakill",
-  "description": "Marksman only. Enemies can only be damaged by coins: ricoshots and coin punches. No parry. / Seulement le Marksman, seules les pieces font des degats, pas de parade.",
+  "description": "Marksman only. Enemies can only be damaged by coins: ricoshots and coin punches. No parry. Punches can break Idols. / Seulement le Marksman, seules les pieces font des degats, pas de parade, le poing casse les idoles.",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100"
   ]
